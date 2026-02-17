@@ -15,7 +15,7 @@ ggplot(weight_height_data, aes(x = Weight, y = Height)) +
        y = "Height (cm)") +
   theme_minimal()
 
-
+-------------------------------------------------------------------------
 
 # Line Plot
 
@@ -32,7 +32,7 @@ ggplot(year_population_data, aes(x = Year, y = Population)) +
        y = "Population (millions)") +
   theme_minimal()
 
-
+-------------------------------------------------------------------------
 # Bar Plot
 
 sales_data <- data.frame(
@@ -47,7 +47,7 @@ ggplot(sales_data, aes(x = Product, y = Sales, fill = Product)) +
        y = "Sales") +
   theme_minimal()
 
-
+-------------------------------------------------------------------------
 # Histogram
 
 age_data <- data.frame(
@@ -59,7 +59,7 @@ ggplot(age_data, aes(x = Age)) +
        x = "Age",
        y = "Frequency") +
   theme_minimal()
-
+-------------------------------------------------------------------------
 # Pie Chart
 
 market_share_data <- data.frame(
@@ -74,7 +74,7 @@ ggplot(market_share_data, aes(x = "", y = Market_Share, fill = Company)) +
        y = NULL) +
   theme_void() +
   theme(legend.position = "right")
-
+-------------------------------------------------------------------------
 # Box Plot
 
 scores_data <- data.frame(
@@ -88,7 +88,7 @@ ggplot(scores_data, aes(x = Class, y = Scores, fill = Class)) +
        x = "Class",
        y = "Scores") +
   theme_minimal()
-
+-------------------------------------------------------------------------
 # Density Plot
 
 weights_data <- data.frame(
@@ -100,7 +100,7 @@ ggplot(weights_data, aes(x = Weight)) +
        x = "Weight (kg)",
        y = "Density") +
   theme_minimal()
-
+-------------------------------------------------------------------------
 # Violin Plot
 
 scores_group_data <- data.frame(
@@ -114,7 +114,7 @@ ggplot(scores_group_data, aes(x = Group, y = Score, fill = Group)) +
        y = "Score") +
   theme_minimal()
 
-
+-------------------------------------------------------------------------
 # Heatmap
 
 temperature_data <- data.frame(
@@ -133,7 +133,7 @@ ggplot(melted_data, aes(x = Month, y = variable, fill = value)) +
        x = "Month",
        y = "City") +
   theme_minimal()
-
+-------------------------------------------------------------------------
 # Facet Plot
 
 sales_region_data <- data.frame(
@@ -148,7 +148,7 @@ ggplot(sales_region_data, aes(x = Month, y = Sales, fill = Region)) +
        x = "Month",
        y = "Sales") +
   theme_minimal()
-
+-------------------------------------------------------------------------
 # hexbin plot
 
 library(hexbin)
@@ -162,7 +162,7 @@ ggplot(engagement_data, aes(x = Likes, y = Comments)) +
     fill = "Density"
   ) +
   theme_minimal()
-
+-------------------------------------------------------------------------
 # Stacked Bar Plot
 
 # Load required libraries
@@ -193,5 +193,124 @@ ggplot(satisfaction_long, aes(x = Category, y = Count, fill = Rating)) +
     fill = "Satisfaction Level"
   ) +
   theme_minimal()
+-------------------------------------------------------------------------
+# Radar Chart
+  library(ggplot2)
+  library(dplyr)
+radar_df <- data.frame(
+  Subject = c("Math", "Science", "English", "History", "Computer"),
+  Score = c(80, 70, 85, 65, 90)
+)
+radar_df <- rbind(radar_df, radar_df[1, ])
+ggplot(radar_df, aes(x = Subject, y = Score, group = 1)) +
+  geom_polygon(fill = "skyblue", alpha = 0.4, color = "blue") +
+  geom_point(size = 3, color = "darkblue") +
+  coord_polar() +
+  ylim(0, 100) +
+  labs(
+    title = "Student Performance Radar Chart",
+    x = "",
+    y = "Score"
+  ) +
+  theme_minimal()
+-------------------------------------------------------------------------
+#3d plot (scatter3d , surface)
+# Load library
+library(plotly)
 
-  
+# Create academic performance dataset
+academic_data <- data.frame(
+  Student = c("A", "B", "C", "D", "E"),
+  Math_Score = c(85, 72, 90, 78, 88),
+  Science_Score = c(78, 85, 80, 75, 82),
+  Attendance = c(95, 92, 98, 85, 93)
+)
+
+
+plot_ly(
+  academic_data,
+  x = ~Math_Score,
+  y = ~Attendance,
+  z = ~Science_Score,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(
+    size = 6,
+    color = ~Science_Score,
+    colorscale = "Viridis"
+  ),
+  text = ~paste("Student:", Student)
+) %>%
+  layout(
+    title = "3D Scatter Plot: Math Score, Attendance & Science Score",
+    scene = list(
+      xaxis = list(title = "Math Score"),
+      yaxis = list(title = "Attendance (%)"),
+      zaxis = list(title = "Science Score")
+    )
+  )
+
+
+math_seq <- seq(min(academic_data$Math_Score),
+                max(academic_data$Math_Score), length.out = 30)
+
+att_seq <- seq(min(academic_data$Attendance),
+               max(academic_data$Attendance), length.out = 30)
+
+science_surface <- outer(math_seq, att_seq,
+                         function(m, a) 50 + (m * 0.3) + (a * 0.2))
+
+plot_ly(
+  x = math_seq,
+  y = att_seq,
+  z = science_surface,
+  type = "surface",
+  colorscale = "Blues"
+) %>%
+  layout(
+    title = "3D Surface Plot: Science Score vs Math & Attendance",
+    scene = list(
+      xaxis = list(title = "Math Score"),
+      yaxis = list(title = "Attendance (%)"),
+      zaxis = list(title = "Science Score")
+    )
+  )
+
+
+plot_ly(
+  academic_data,
+  x = ~Math_Score,
+  y = ~Science_Score,
+  z = ~Attendance,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(color = "orange", size = 5)
+) %>%
+  layout(
+    title = "Science Score vs Math Score",
+    scene = list(
+      xaxis = list(title = "Math Score"),
+      yaxis = list(title = "Science Score"),
+      zaxis = list(title = "Attendance (%)")
+    )
+  )
+
+
+plot_ly(
+  academic_data,
+  x = ~Attendance,
+  y = ~Science_Score,
+  z = ~Math_Score,
+  type = "scatter3d",
+  mode = "line markers",
+  marker = list(color = "red", size = 5)
+) %>%
+  layout(
+    title = "Science Score vs Attendance",
+    scene = list(
+      xaxis = list(title = "Attendance (%)"),
+      yaxis = list(title = "Science Score"),
+      zaxis = list(title = "Math Score")
+    )
+  )
+
